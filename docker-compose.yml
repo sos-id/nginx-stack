@@ -1,0 +1,99 @@
+version: "3.8"
+
+
+services:
+  app:
+    image: "jc21/nginx-proxy-manager:latest"
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "81:81"
+    environment:
+      DB_MYSQL_HOST: "db"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: "sos"
+      DB_MYSQL_PASSWORD: "shieldOn#@25"
+      DB_MYSQL_NAME: "npm"
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    depends_on:
+      - db
+      - phpmyadmin
+      - db-postgres
+      - db-mysql
+  db:
+    image: 'jc21/mariadb-aria:latest'
+    container_name: mariadb-nginx-proxy-manager
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 'shieldOn#@25'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'sos'
+      MYSQL_PASSWORD: 'shieldOn#@25'
+    volumes:
+      - ./mysql_maria:/var/lib/mysql
+
+  db-mysql:
+    # image: 'mysql:latest'
+    # restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./infra/docker/mysql-conf/Dockerfile
+    container_name: mysql-nginx-proxy-manager
+    ports:
+      # - "33065:3306"
+      - target: 3306
+        published: ${DB_PUBLISHED_PORT:-3306}
+        protocol: tcp
+        mode: host
+    # configs:
+    #   - source: db-config
+    #     target: /etc/my.cnf
+    # volumes:
+    #   - type: volume
+    #     source: db-store
+    #     target: /var/lib/mysql
+    #     volume:
+    #       nocopy: true
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE:-npm}
+      - MYSQL_USER=${DB_USERNAME:-sos}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-shieldOn#@25}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-shieldOn#@25}
+      # MYSQL_DATABASE: laravel
+      # MYSQL_USER: root
+      # MYSQL_ROOT_PASSWORD: LoginMai07
+    volumes:
+        - ./mysql_server:/var/lib/mysql
+        # - ./mysql:/var/lib/mysql
+        
+  db-postgres:
+    image: "postgres:15.5-bullseye"
+    container_name: postgres-nginx-proxy-manager
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: shieldOn#@25
+    ports:
+      - "5432:5432"
+    volumes:
+        - ./postgres:/var/lib/postgresql
+        
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin-nginx-proxy-manager
+    restart: unless-stopped
+    depends_on:
+      - db
+      - db-mysql
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+
+networks:
+  default:
+    external: true
+    name: proxy_network
