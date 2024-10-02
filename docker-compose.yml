@@ -1,6 +1,5 @@
 version: "3.8"
 
-
 services:
   app:
     image: "jc21/nginx-proxy-manager:latest"
@@ -29,10 +28,10 @@ services:
     container_name: mariadb-nginx-proxy-manager
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: 'shieldOn#@25'
-      MYSQL_DATABASE: 'npm'
-      MYSQL_USER: 'sos'
-      MYSQL_PASSWORD: 'shieldOn#@25'
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ./mysql_maria:/var/lib/mysql
 
@@ -59,28 +58,28 @@ services:
     #     volume:
     #       nocopy: true
     environment:
-      - MYSQL_DATABASE=${DB_DATABASE:-npm}
-      - MYSQL_USER=${DB_USERNAME:-sos}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-shieldOn#@25}
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-shieldOn#@25}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
       # MYSQL_DATABASE: laravel
       # MYSQL_USER: root
       # MYSQL_ROOT_PASSWORD: LoginMai07
     volumes:
-        - ./mysql_server:/var/lib/mysql
-        # - ./mysql:/var/lib/mysql
-        
+      - ./mysql_server:/var/lib/mysql
+      # - ./mysql:/var/lib/mysql
+
   db-postgres:
     image: "postgres:15.5-bullseye"
     container_name: postgres-nginx-proxy-manager
     restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: shieldOn#@25
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
-        - ./postgres:/var/lib/postgresql
-        
+      - ./postgres:/var/lib/postgresql
+
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: phpmyadmin-nginx-proxy-manager
