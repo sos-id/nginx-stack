@@ -19,66 +19,20 @@ services:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
     depends_on:
-      - db
       - phpmyadmin
-      - db-postgres
-      - db-mysql
+      - db
+
   db:
     image: 'jc21/mariadb-aria:latest'
-    container_name: mariadb-nginx-proxy-manager
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: 'shieldOn#@25'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'sos'
+      MYSQL_PASSWORD: 'shieldOn#@25'
+      MARIADB_AUTO_UPGRADE: '1'
     volumes:
-      - ./mysql_maria:/var/lib/mysql
-
-  db-mysql:
-    # image: 'mysql:latest'
-    # restart: unless-stopped
-    build:
-      context: .
-      dockerfile: ./infra/docker/mysql-conf/Dockerfile
-    container_name: mysql-nginx-proxy-manager
-    ports:
-      # - "33065:3306"
-      - target: 3306
-        published: ${DB_PUBLISHED_PORT:-3306}
-        protocol: tcp
-        mode: host
-    # configs:
-    #   - source: db-config
-    #     target: /etc/my.cnf
-    # volumes:
-    #   - type: volume
-    #     source: db-store
-    #     target: /var/lib/mysql
-    #     volume:
-    #       nocopy: true
-    environment:
-      - MYSQL_DATABASE=${DB_DATABASE}
-      - MYSQL_USER=${DB_USERNAME}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      # MYSQL_DATABASE: laravel
-      # MYSQL_USER: root
-      # MYSQL_ROOT_PASSWORD: LoginMai07
-    volumes:
-      - ./mysql_server:/var/lib/mysql
-      # - ./mysql:/var/lib/mysql
-
-  db-postgres:
-    image: "postgres:15.5-bullseye"
-    container_name: postgres-nginx-proxy-manager
-    restart: unless-stopped
-    environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./postgres:/var/lib/postgresql
+      - ./mysql:/var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -86,7 +40,6 @@ services:
     restart: unless-stopped
     depends_on:
       - db
-      - db-mysql
     ports:
       - 8081:80
     environment:
@@ -95,4 +48,4 @@ services:
 networks:
   default:
     external: true
-    name: proxy_network
+    name: strapi_backend_internal
