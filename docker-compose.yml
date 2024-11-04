@@ -28,10 +28,10 @@ services:
     container_name: mariadb-nginx-proxy-manager
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: 'shieldOn#@25'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'sos'
+      MYSQL_PASSWORD: 'shieldOn#@25'
     volumes:
       - ./mysql_maria:/var/lib/mysql
 
@@ -58,13 +58,12 @@ services:
     #     volume:
     #       nocopy: true
     environment:
-      - MYSQL_DATABASE=${DB_DATABASE}
-      - MYSQL_USER=${DB_USERNAME}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE='npm'
+      - MYSQL_USER='sos'
+      - MYSQL_PASSWORD='shieldOn#@25'
+      - MYSQL_ROOT_PASSWORD='shieldOn#@25'
       # MYSQL_DATABASE: laravel
       # MYSQL_USER: root
-      # MYSQL_ROOT_PASSWORD: LoginMai07
     volumes:
       - ./mysql_server:/var/lib/mysql
       # - ./mysql:/var/lib/mysql
@@ -74,7 +73,7 @@ services:
     container_name: postgres-nginx-proxy-manager
     restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_PASSWORD: shieldOn#@25
     ports:
       - "5432:5432"
     volumes:
