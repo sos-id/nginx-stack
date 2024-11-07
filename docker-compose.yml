@@ -36,6 +36,7 @@ services:
       - ./mysql_maria:/var/lib/mysql
 
   db-mysql:
+    image: 'mysql:lts-oraclelinux8'
     # image: 'mysql:latest'
     # restart: unless-stopped
     build:

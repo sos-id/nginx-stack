@@ -12,7 +12,3 @@ EOF
 
 
 # Mengatur variabel lingkungan
-ENV MYSQL_ROOT_PASSWORD=LoginMai07
-ENV MYSQL_DATABASE=laravel
-ENV MYSQL_USER=phper
-ENV MYSQL_PASSWORD=SecretMission00#
